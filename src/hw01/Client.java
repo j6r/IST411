@@ -1,10 +1,16 @@
+package hw01;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Client {
+
+   private static final String PROMPT_MESSAGE = "Enter your Message: ";
 
    public static void main(String args[]) {
       try (
@@ -14,16 +20,16 @@ public class Client {
               BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream())); // System.out.println(in.readLine());
               ) {
          String input;
-         System.out.println("Enter your Message: ");
+         System.out.println(PROMPT_MESSAGE);
 
          while ((input = inputString.readLine()) != null) {
             output.println(input);
             System.out.println(in.readLine());
-            System.out.println("Enter your Message: ");
+            System.out.println(PROMPT_MESSAGE);
          }
-      } catch (Exception e) {
-         e.printStackTrace();
-
+      } catch (IOException ex) {
+         Logger.getLogger(Client.class.getName()).log(Level.SEVERE,
+                 "Server was not available or returned an error.", ex);
       }
 
    }

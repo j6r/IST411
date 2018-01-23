@@ -5,7 +5,7 @@ import java.util.TreeSet;
 
 /**
  * Account provides basic functionality associated with a bank account including maintaining a
- * balance, making deposits, making withdrawals, and keeping a history of transactions. 
+ * balance, making deposits, making withdrawals, and keeping a history of transactions.
  *
  */
 public class Account {
@@ -102,11 +102,9 @@ public class Account {
     * Prints the account's transaction history to standard out
     */
    public void printTransactionHistory() {
-      synchronized (transactionHistory) {
-         System.out.printf("Transaction history for account %d:%n", id);
-         for (TransactionRecord transactionRecord : transactionHistory) {
-            System.out.println(transactionRecord.toString());
-         }
+      System.out.printf("Transaction history for account %d:%n", id);
+      for (TransactionRecord transactionRecord : transactionHistory) {
+         System.out.println(transactionRecord.toString());
       }
    }
 

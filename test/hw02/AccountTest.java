@@ -4,10 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author redjen
- */
+
 public class AccountTest {
 
    private static final int EXPECTED_ID_1 = 100;

@@ -11,35 +11,32 @@ import java.util.Map;
  * Bank class replicating the function of an actual bank: its functions includes to open, modify ,
  * and deletes accounts. *
  */
-public class Bank  {
+public class Bank {
 
    // Holds customers accounts with the CustomerID as the key
    private Map<Integer, Account> bankAccounts = new HashMap<>();
-   
 
    /**
-    *default constructor
+    * default constructor
     */
    public Bank() {
 
    }
 
-
-
    /**
     * add a customer account after checking if an account exist or not
+    *
     * @param in_Cust_In
     * @param inAccount
     */
    public boolean addAccount(int in_Cust_In, Account inAccount) {
 
+      if (!this.queryCustAccount(in_Cust_In)) {
 
-       if(!this.queryCustAccount(in_Cust_In)){
-         
          this.bankAccounts.put(in_Cust_In, inAccount);
          return true;
-      }else{
-         
+      } else {
+
          return false;
       }
    }
@@ -51,12 +48,12 @@ public class Bank  {
     */
    public boolean deleteAccont(int in_Cust_In) {
 
-       if(this.queryCustAccount(in_Cust_In)){
-         
+      if (this.queryCustAccount(in_Cust_In)) {
+
          this.bankAccounts.remove(in_Cust_In);
          return true;
-      }else{
-         
+      } else {
+
          return false;
       }
 
@@ -69,17 +66,18 @@ public class Bank  {
     * @return
     * @throws AccountException
     */
-   public Boolean Deposit(int in_Cust_In, double amount) throws AccountException{
-      
-      if(this.queryCustAccount(in_Cust_In)){
-         
+   public Boolean Deposit(int in_Cust_In, double amount) throws AccountException {
+
+      if (this.queryCustAccount(in_Cust_In)) {
+
          this.bankAccounts.get(in_Cust_In).withdraw(amount);
          return true;
-      }else{
-         
+      } else {
+
          return false;
       }
    }
+
    /**
     * Adds the specified amount of money to the account balance
     *
@@ -87,56 +85,55 @@ public class Bank  {
     * @return the new account balance
     * @throws AccountException if the amount is less than $0.00
     */
-   
-   public Boolean Deposit(int in_Cust_In, double amount, boolean overdraft) throws AccountException{
-      
-        if(this.queryCustAccount(in_Cust_In)){
-         
+
+   public Boolean Deposit(int in_Cust_In, double amount, boolean overdraft) throws AccountException {
+
+      if (this.queryCustAccount(in_Cust_In)) {
+
          this.bankAccounts.get(in_Cust_In).withdraw(amount, overdraft);
          return true;
-      }else{
-         
+      } else {
+
          return false;
       }
-      
-      
+
    }
    //retrieves the balance
 
    /**
     * retreives an account balance
+    *
     * @param in_Cust
     */
-   public void getBalance(int in_Cust){
-      
-      
+   public void getBalance(int in_Cust) {
+
       double balance = this.bankAccounts.get(in_Cust).getBalance();
       System.out.println(balance);
-      
+
    }
 
-
    /**
-    * Transfer funds from one account to another 
+    * Transfer funds from one account to another
+    *
     * @param Cust_From
     * @param Cust_To
     * @param amount1
     * @return
     * @throws AccountException
     */
-   public boolean transferfunds(int Cust_From,  int Cust_To, double amount1 ) throws AccountException{
+   public boolean transferfunds(int Cust_From, int Cust_To, double amount1) throws AccountException {
       boolean check1 = this.queryCustAccount(Cust_From);
       boolean check2 = this.queryCustAccount(Cust_To);
-      if(check1 && check2 == true){  
-        this.bankAccounts.get(Cust_From).withdraw(amount1);
-        this.bankAccounts.get(Cust_To).deposit(amount1);
+      if (check1 && check2 == true) {
+         this.bankAccounts.get(Cust_From).withdraw(amount1);
+         this.bankAccounts.get(Cust_To).deposit(amount1);
          return true;
-      }
-      else{
-         
+      } else {
+
          return false;
       }
    }
+
    // Checks for duplicate accounts
    private boolean queryCustAccount(int inCustID) {
 
@@ -145,7 +142,7 @@ public class Bank  {
    }
 
    /**
-    *queries all Customers
+    * queries all Customers
     */
    public void queryCustIDs() {
 
@@ -155,7 +152,5 @@ public class Bank  {
 
       }
    }
-
- 
 
 }

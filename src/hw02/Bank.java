@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 //  @author Single-eye
+
 /**
  * Bank class replicating the function of an actual bank: its functions includes to open, modify ,
  * and deletes accounts. *
@@ -17,16 +18,9 @@ public class Bank {
    /**
     * default constructor
     */
-   public Bank() {
+   public Bank() {}
 
-   }
-
-   /**
-    * add a customer account after checking if an account exist or not
-    *
-    * @param in_Cust_In
-    * @param inAccount
-    */
+  
    public void addAccount(double inAccount) {
 
    }
@@ -39,12 +33,10 @@ public class Bank {
          randomNumber = r.nextInt(100) + 1;
 
          for (int i = 0; i < this.bankAccounts.size(); i++) {
-            if(randomNumber == this.bankAccounts.get(i).getId()){
-               
-               
+            if (randomNumber == this.bankAccounts.get(i).getId()) {
+
             }
-            
-            
+
          }
       }
 
@@ -52,107 +44,99 @@ public class Bank {
 
    /**
     *
-    * @param in_Cust_In
-    * @return
+    * @param Cust_In customer identifier
+    * @throws AccountException if an account does exist
     */
-   public boolean deleteAccont(int in_Cust_In) {
-
-      if (this.queryCustAccount(in_Cust_In)) {
-
-         this.bankAccounts.remove(in_Cust_In);
-         return true;
+   public void  deleteAccont(int Cust_In) throws AccountException {
+      if (this.queryCustAccount(Cust_In)) {
+         this.bankAccounts.remove(Cust_In);
       } else {
-
-         return false;
+         throw new AccountException("The account does not exist");
       }
 
-   }
-
-   /**
-    *
-    * @param in_Cust_In
-    * @param amount
-    * @return
-    * @throws AccountException
-    */
-   public Boolean Deposit(int in_Cust_In, double amount) throws AccountException {
-
-      if (this.queryCustAccount(in_Cust_In)) {
-
-         this.bankAccounts.get(in_Cust_In).withdraw(amount);
-         return true;
-      } else {
-
-         return false;
-      }
    }
 
    /**
     * Adds the specified amount of money to the account balance
-    *
+    * @param Cust_In customer identifier
     * @param amount the amount to add
     * @return the new account balance
-    * @throws AccountException if the amount is less than $0.00
+    * @throws AccountException if an account does exist
+    *  AccountException if the amount is less than $0.00
     */
-   public Boolean Deposit(int in_Cust_In, double amount, boolean overdraft) throws AccountException {
+   public double Deposit(int Cust_In, double amount) throws AccountException {
 
-      if (this.queryCustAccount(in_Cust_In)) {
-
-         this.bankAccounts.get(in_Cust_In).withdraw(amount, overdraft);
-         return true;
+       if (this.queryCustAccount(Cust_In)) {
+         return this.bankAccounts.get(Cust_In).deposit(amount);
       } else {
-
-         return false;
+         throw new AccountException("The account does not exist");
       }
-
+      
    }
-   //retrieves the balance
-
-   /**
-    * retreives an account balance
+    /**
     *
-    * @param in_Cust
-    */
-   public void getBalance(int in_Cust) {
-
-      double balance = this.bankAccounts.get(in_Cust).getBalance();
-      System.out.println(balance);
-
-   }
-
-   /**
-    * Transfer funds from one account to another
-    *
-    * @param Cust_From
-    * @param Cust_To
-    * @param amount1
-    * @return
-    * @throws AccountException
-    */
-   public boolean transferfunds(int Cust_From, int Cust_To, double amount1) throws AccountException {
-      boolean check1 = this.queryCustAccount(Cust_From);
-      boolean check2 = this.queryCustAccount(Cust_To);
-      if (check1 && check2 == true) {
-         this.bankAccounts.get(Cust_From).withdraw(amount1);
-         this.bankAccounts.get(Cust_To).deposit(amount1);
-         return true;
+    * @param Cust_In customer identifier
+    * @param amount the amount to withdraw
+    * @return the new balance
+    * @throws AccountException if an account does not exist
+    * if the amount to withdraw is less than $0.00 or if allowOverdraft is
+    * false and the withdrawal amount is greater than the available balance
+    * */
+   public double withdraw(int Cust_In, double amount) throws AccountException{
+       if (this.queryCustAccount(Cust_In)) {
+        return this.bankAccounts.get(Cust_In).withdraw(amount, false);    
       } else {
-
-         return false;
+         throw new AccountException("The account does not exist");
+      }
+        
+  }
+    /**
+    *
+    * @param Cust_In customer account identifier
+    * @return the account balance
+    * @throws AccountException if an account does not exist;
+    * AccountException if the amount is less than $0.00
+    */
+   public double getBalance(int Cust_In) throws AccountException {
+       if (this.queryCustAccount(Cust_In)) {
+         return this.bankAccounts.get(Cust_In).getBalance();   
+      } else {
+         throw new AccountException("The account does not exist");
+      }
+      
+   }
+   /**
+    *
+    * @param Cust_From the account to withdraw from
+    * @param Cust_To the account to deposit into
+    * @param amount1 the amount for the transaction
+    * @throws AccountException if an account does not exist;
+    * if the amount to withdraw is less than $0.00 or if allowOverdraft is
+    * false and the withdrawal amount is greater than the available balance;
+    * AccountException if the amount is less than $0.00
+    */
+   public void transferfunds(int Cust_From, int Cust_To, double amount1) throws AccountException {
+      if (this.queryCustAccount(Cust_From)) {
+          this.bankAccounts.get(Cust_From).withdraw(amount1, false);
+          this.bankAccounts.get(Cust_To).deposit(amount1);     
+      } else {
+        throw new AccountException("One or both account(s) does not exist");
       }
    }
-
-   // Checks for duplicate accounts
+    /**
+    *
+    * @param Cust_From the account to withdraw from
+    * @returns bankAccount - False if the key does not exist; True if the key does exist
+    */
    private boolean queryCustAccount(int inCustID) {
 
       return bankAccounts.containsKey(inCustID);
 
    }
-
    /**
-    * queries all Customers
+    * queries all Customers 
     */
-   public void queryCustIDs() {
+   public void printCustIDs() {
 
       for (int key : bankAccounts.keySet()) {
 

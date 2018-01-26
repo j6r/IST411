@@ -2,11 +2,9 @@ package hw02;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-/**
- *
- * @author Single-eye
- */
+//  @author Single-eye
 /**
  * Bank class replicating the function of an actual bank: its functions includes to open, modify ,
  * and deletes accounts. *
@@ -29,16 +27,27 @@ public class Bank {
     * @param in_Cust_In
     * @param inAccount
     */
-   public boolean addAccount(int in_Cust_In, Account inAccount) {
+   public void addAccount(double inAccount) {
 
-      if (!this.queryCustAccount(in_Cust_In)) {
+   }
 
-         this.bankAccounts.put(in_Cust_In, inAccount);
-         return true;
-      } else {
+   private void createtCustomerID() {
 
-         return false;
+      int randomNumber;
+      while (true) {
+         Random r = new Random();
+         randomNumber = r.nextInt(100) + 1;
+
+         for (int i = 0; i < this.bankAccounts.size(); i++) {
+            if(randomNumber == this.bankAccounts.get(i).getId()){
+               
+               
+            }
+            
+            
+         }
       }
+
    }
 
    /**
@@ -85,7 +94,6 @@ public class Bank {
     * @return the new account balance
     * @throws AccountException if the amount is less than $0.00
     */
-
    public Boolean Deposit(int in_Cust_In, double amount, boolean overdraft) throws AccountException {
 
       if (this.queryCustAccount(in_Cust_In)) {

@@ -2,7 +2,6 @@ package hw02;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 //  @author Single-eye
 
@@ -14,8 +13,7 @@ public class Bank {
 
    // Holds customers accounts with the CustomerID as the key
    private Map<Integer, Account> bankAccounts = new HashMap<>();
-   private Account account;
-   private int Size = 10;
+   private  int customer = 1;
 
    /**
     * default constructor
@@ -23,17 +21,18 @@ public class Bank {
    public Bank() {}
 
    /**
-    *Creates a new Customer Account with specified metadata
+    *Creates a new customer Account with specified meta-data
     * 
     * @param amount initial balance
     * @throws AccountException if the initial balance is less than $0.00
     */
    public void addAccount(double amount) throws AccountException {
       int id = this.createtCustomerID();
-      this.bankAccounts.put(id, account = new Account(id, amount));
+      this.bankAccounts.put(id, new Account(id, amount));
    }
    /**
-    *
+    * Deletes a customer accounts
+    * 
     * @param Cust_In customer identifier
     * @throws AccountException if an account does exist
     */
@@ -65,7 +64,8 @@ public class Bank {
       
    }
     /**
-    *
+    * Withdraws a specific amount
+    * 
     * @param Cust_In customer identifier
     * @param amount the amount to withdraw
     * @return the new balance
@@ -82,7 +82,8 @@ public class Bank {
         
   }
     /**
-    *
+    * retrieves an account balance
+    * 
     * @param Cust_In customer account identifier
     * @return the account balance
     * @throws AccountException if an account does not exist;
@@ -97,7 +98,8 @@ public class Bank {
       
    }
    /**
-    *
+    *transfers specific amount from one account to another. 
+    * 
     * @param Cust_From the account to withdraw from
     * @param Cust_To the account to deposit into
     * @param amount1 the amount for the transaction
@@ -115,7 +117,8 @@ public class Bank {
       }
    }
     /**
-    *
+    * queries customers accounts for duplicates
+    * 
     * @param Cust_From the account to withdraw from
     * @returns bankAccount - False if the key does not exist; True if the key does exist
     */
@@ -125,31 +128,18 @@ public class Bank {
 
    }
    /**
-    * Randomly generates a randome number;
+    * Randomly generates a random number;
     * 
     * @return randomNumber 
     */
    private int createtCustomerID() {
-      int randomNumber;
-      while (true) {
-         Random r = new Random();
-         randomNumber = r.nextInt(this.Size) + 1;
-         if(bankAccounts.containsKey(randomNumber)){
-           this.createtCustomerID();          
-         }else{        
-            this.Size += this.Size;
-            break;
-         }
-      }
-      return randomNumber;
-   }
+         return this.customer++; 
+     }
    /**
     * queries all Customers 
     */
    public void printCustIDs() {
-
       for (int key : bankAccounts.keySet()) {
-
          System.out.println(this.bankAccounts.get(key));
 
       }

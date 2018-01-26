@@ -15,6 +15,7 @@ public class Bank {
    // Holds customers accounts with the CustomerID as the key
    private Map<Integer, Account> bankAccounts = new HashMap<>();
    private Account account;
+   private int Size = 10;
 
    /**
     * default constructor
@@ -22,33 +23,15 @@ public class Bank {
    public Bank() {}
 
    /**
-    *
+    *Creates a new Customer Account with specified metadata
+    * 
     * @param amount initial balance
     * @throws AccountException if the initial balance is less than $0.00
     */
    public void addAccount(double amount) throws AccountException {
       int id = this.createtCustomerID();
       this.bankAccounts.put(id, account = new Account(id, amount));
-
    }
-
-   private int createtCustomerID() {
-
-      int randomNumber;
-      while (true) {
-         Random r = new Random();
-         randomNumber = r.nextInt(100) + 1;
-
-         for (int i = 0; i < this.bankAccounts.size(); i++) {
-            if (randomNumber == this.bankAccounts.get(i).getId()) {
-               
-            }
-
-         }
-      }
-
-   }
-
    /**
     *
     * @param Cust_In customer identifier
@@ -65,6 +48,7 @@ public class Bank {
 
    /**
     * Adds the specified amount of money to the account balance
+    * 
     * @param Cust_In customer identifier
     * @param amount the amount to add
     * @return the new account balance
@@ -139,6 +123,25 @@ public class Bank {
 
       return bankAccounts.containsKey(inCustID);
 
+   }
+   /**
+    * Randomly generates a randome number;
+    * 
+    * @return randomNumber 
+    */
+   private int createtCustomerID() {
+      int randomNumber;
+      while (true) {
+         Random r = new Random();
+         randomNumber = r.nextInt(this.Size) + 1;
+         if(bankAccounts.containsKey(randomNumber)){
+           this.createtCustomerID();          
+         }else{        
+            this.Size += this.Size;
+            break;
+         }
+      }
+      return randomNumber;
    }
    /**
     * queries all Customers 

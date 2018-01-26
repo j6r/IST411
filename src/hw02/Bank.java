@@ -14,18 +14,25 @@ public class Bank {
 
    // Holds customers accounts with the CustomerID as the key
    private Map<Integer, Account> bankAccounts = new HashMap<>();
+   private Account account;
 
    /**
     * default constructor
     */
    public Bank() {}
 
-  
-   public void addAccount(double inAccount) {
+   /**
+    *
+    * @param amount initial balance
+    * @throws AccountException if the initial balance is less than $0.00
+    */
+   public void addAccount(double amount) throws AccountException {
+      int id = this.createtCustomerID();
+      this.bankAccounts.put(id, account = new Account(id, amount));
 
    }
 
-   private void createtCustomerID() {
+   private int createtCustomerID() {
 
       int randomNumber;
       while (true) {
@@ -34,7 +41,7 @@ public class Bank {
 
          for (int i = 0; i < this.bankAccounts.size(); i++) {
             if (randomNumber == this.bankAccounts.get(i).getId()) {
-
+               
             }
 
          }

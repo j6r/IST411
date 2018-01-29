@@ -32,3 +32,4 @@ nbdist/
 
 # Jacoco
 .jacocoverage/
+/Assignments0102/nbproject/private/

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +19,27 @@ import rssitem.Item;
  * RSSClient is a generic client for RSS feed APIs. It fetches the feed and
  * provides methods for extracting feed metadata and a list of article items.
  *
+ * Fetching a list of RSS article items requires two steps: 1) creating an
+ * instance of RSSClient with an RSS feed URL (or using the default); 2) calling
+ * getItems().
+ *
+ * RSSClient client = new RSSClient(feedURL);
+ * List<Item> articleList = client.getItems().
+ *
+ * If the feedURL is not specified the client will fetch items from the default
+ * feed for ITS Alerts.
+ *
+ * RSSClient also provides information about the feed itself, in addition to a
+ * list of the items. Each feed provides its title, description, language,
+ * copyright statement, URL, and date it was last updated. To get this
+ * information, create an instance of RSSClient then call the appropriate
+ * getters.
+ *
+ * RSSClient client = new RSSClient));
+ * String title = client.getTitle();
+ * String description = client.getDescription();
+ * etc.
+ *
  */
 public class RSSClient {
 
@@ -24,10 +47,18 @@ public class RSSClient {
    private final String feedUrl;
    private final RSSFeed feed;
 
+   /**
+    * Constructs a new RSSClient using the default ITS Alerts feed URL
+    */
    public RSSClient() {
       this(DEFAULT_FEED_URL);
    }
 
+   /**
+    * Constructs a new RSSClient using the specified RSS feed URL
+    *
+    * @param feedUrl
+    */
    public RSSClient(String feedUrl) {
       this.feedUrl = feedUrl;
       // TODO handling for null feed
@@ -89,8 +120,17 @@ public class RSSClient {
     *
     * @return the last updated time as a string
     */
-   public String getLastBuildDate() {
+   public String getLastBuildDateString() {
       return feed.getLastBuildDate();
+   }
+
+   /**
+    * Returns the last time the feed was updated as a LocalDateTime object
+    *
+    * @return a LocalDateTime object representing the last update
+    */
+   public LocalDateTime getLastBuildDate() {
+      return LocalDateTime.parse(feed.getLastBuildDate(), DateTimeFormatter.RFC_1123_DATE_TIME);
    }
 
    /**
@@ -118,11 +158,11 @@ public class RSSClient {
       try {
 
          conn = getConnection();
-         
+
          if (conn == null) {
             throw new RSSClientException("An error occurred while fetching the feed");
          }
-         
+
          jaxbContext = JAXBContext.newInstance(RSSFeed.class);
 
          try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {

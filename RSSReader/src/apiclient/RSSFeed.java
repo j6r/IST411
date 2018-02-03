@@ -10,8 +10,6 @@ import rssitem.Item;
  *
  * It is constructed by the RSSClient.
  *
- * @author j6r
- *
  */
 @XmlRootElement(name = "rss")
 public class RSSFeed {

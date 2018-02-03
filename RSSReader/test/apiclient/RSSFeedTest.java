@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
  * This classes will be instantiated from RSSClient by parsing RSS feeds. Thus,
  * normal unit tests would not be adequate.
  *
- * @author j6r
  */
 public class RSSFeedTest {
 
@@ -86,5 +85,5 @@ public class RSSFeedTest {
       assertEquals(EXPECTED_ITEM_COUNT, feed.getItems().size());
    }
 
-   // TODO integration tests for Item
+   // TODO integration tests for Item?
 }

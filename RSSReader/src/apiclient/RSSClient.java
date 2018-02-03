@@ -1,0 +1,165 @@
+package apiclient;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import rssitem.Item;
+
+/**
+ * RSSClient is a generic client for RSS feed APIs. It fetches the feed and
+ * provides methods for extracting feed metadata and a list of article items.
+ *
+ */
+public class RSSClient {
+
+   private static final String DEFAULT_FEED_URL = "http://alerts.its.psu.edu/alerts.rss";
+   private final String feedUrl;
+   private final RSSFeed feed;
+
+   public RSSClient() {
+      this(DEFAULT_FEED_URL);
+   }
+
+   public RSSClient(String feedUrl) {
+      this.feedUrl = feedUrl;
+      // TODO handling for null feed
+      this.feed = getFeed();
+   }
+
+   /**
+    * Returns the feed's title
+    *
+    * @return the feed's title
+    */
+   public String getTitle() {
+      return feed.getTitle();
+   }
+
+   /**
+    * Returns the feed's URL
+    *
+    * @return the feed's URL as a string
+    */
+   public String getLink() {
+      return feed.getLink();
+   }
+
+   /**
+    * Returns the feed's description
+    *
+    * @return the feed's description
+    */
+   public String getDescription() {
+      return feed.getDescription();
+   }
+
+   /**
+    * Returns the feed's language
+    *
+    * The language is represented as a language tag (e.g. en-us or pt-br).
+    * {@link https://en.wikipedia.org/wiki/Language_localisation#Language_tags_and_codes}
+    *
+    * @return the feed's language tag
+    */
+   public String getLanguage() {
+      return feed.getLanguage();
+   }
+
+   /**
+    * Returns the feed's copyright statement
+    *
+    * @return the feed's copyright statement
+    */
+   public String getCopyright() {
+      return feed.getCopyright();
+   }
+
+   /**
+    * Returns the last time the feed was updated
+    * The date may be in a variety for formats. PSU Alerts uses
+    * DateTimeFormatter.RFC_1123_DATE_TIME
+    *
+    * @return the last updated time as a string
+    */
+   public String getLastBuildDate() {
+      return feed.getLastBuildDate();
+   }
+
+   /**
+    * Returns a list of the items in the feed.
+    *
+    * @see Item
+    * @return a list of the items in the feed
+    */
+   public ArrayList<Item> getItems() {
+      return (ArrayList<Item>) feed.getItems();
+   }
+
+   /**
+    * Connects to the specified host, pulls the RSS feed, and parses it.
+    *
+    * @return an RSSFeed object containing the feed metadata and items
+    */
+   private RSSFeed getFeed() {
+      // TODO better exception handling, including nulls
+      URLConnection conn = null;
+      JAXBContext jaxbContext = null;
+      Unmarshaller jaxbUnmarshaller = null;
+      RSSFeed rf = null;
+
+      try {
+
+         conn = getConnection();
+         
+         if (conn == null) {
+            throw new RSSClientException("An error occurred while fetching the feed");
+         }
+         
+         jaxbContext = JAXBContext.newInstance(RSSFeed.class);
+
+         try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+
+            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            rf = (RSSFeed) jaxbUnmarshaller.unmarshal(in);
+         } catch (IOException ex) {
+            Logger.getLogger(RSSClient.class.getName()).log(Level.SEVERE, null, ex);
+         }
+
+      } catch (RSSClientException | JAXBException ex) {
+         Logger.getLogger(RSSClient.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      return rf;
+   }
+
+   /**
+    * Gets a connection to the RSS feed
+    *
+    * @return a URLConnection object for the RSS feed
+    * @throws RSSClientException
+    */
+   private URLConnection getConnection() throws RSSClientException {
+      // TODO better exception handling, including nulls
+      URL url = null;
+      URLConnection conn = null;
+
+      try {
+         url = new URL(feedUrl);
+         conn = url.openConnection();
+
+      } catch (IOException ex) {
+         Logger.getLogger(RSSClient.class.getName()).log(Level.SEVERE, null, ex);
+         throw new RSSClientException("Connection error occurred", ex);
+      }
+      return conn;
+   }
+
+}

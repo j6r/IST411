@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!-- was: <?xml version="1.0" encoding="iso-8859-1"?> -->
+<rss version="2.0">
+<channel>
+<title>ITS Alerts</title>
+<link>http://alerts.its.psu.edu</link>
+<description>The Information Technology Services (ITS) Alerts System is a rapid-delivery method used to distribute timely information on major ITS services, unexpected outages, and maintenance schedules to the Penn State community.</description>
+<language>en-us</language>
+<copyright>Copyright2018 The Pennsylvania State University</copyright><lastBuildDate>Wed, 31 Jan 2018 22:10:01 -0500</lastBuildDate>
+		
+<item>
+<title><![CDATA[Enterprise VPN Maintenance ]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4936</link>
+<description><![CDATA[On Friday 2/2, starting at 05:00 and lasting roughly till 07:00, Data Centers Services will be upgrading the Enterprise VPN. During this work, there is no outage expected of the VPN, however some connections could be disrupted.  <br /> <br />We appreciate your patience and assistance as we work to improve security and reliability of services in Enterprise IT. This change is being tracked via CHG0046488. <br />]]></description>
+<pubDate>Wed, 31 Jan 2018 08:45:54 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[Resolved: Known Error impacting Yammer]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4935</link>
+<description><![CDATA[The Yammer log in issue has been resolved by the vendor.  <br /> <br />The vendor determined that a recent update to their environment caused a portion of their infrastructure that facilitates user sign in to become degraded. They reverted the update, which has fixed the issue. <br /> <br />If you continue to experience problems with Yammer, please contact the IT Service Desk (itservicedesk@psu.edu) or 814-865-HELP.]]></description>
+<pubDate>Tue, 30 Jan 2018 22:14:25 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[Resolved: Maintenance on TSM server knox.its.psu.edu scheduled for January 30, 2018]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4926</link>
+<description><![CDATA[As of 2:05 p.m. the maintenance is complete and TSM server knox.its.psu.edu is available to clients for backup and restore. <br /> <br />During maintenance there was an issue with a hardware component.  However, it is not impacting the normal function of the server.  Penn State IT staff are continuing to monitor the situation.]]></description>
+<pubDate>Tue, 30 Jan 2018 15:50:02 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[Resolved: Known Issue Impacting Webmail]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4934</link>
+<description><![CDATA[Penn State IT staff was able to identify the problem and resolve the issues with Webmail around 10:41 a.m.]]></description>
+<pubDate>Tue, 30 Jan 2018 11:09:15 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[ScholarSphere service interruption, 01/30/2018]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4933</link>
+<description><![CDATA[There will be a brief interruption ofScholarSphere during the 5-7 a.m. (EDT) maintenance window on Tuesday, January 30th. ]]></description>
+<pubDate>Mon, 29 Jan 2018 15:01:40 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[Canvas Maintenance Jan. 31 from 5:00am - 7:00am EST]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4932</link>
+<description><![CDATA[Penn State Enterprise IT performs regular updates to address minor issues within Canvas to ensure the best possible user experience. The next regular update will happen on Wednesday, Jan. 31 during the scheduled maintenance window between 5 to 7 a.m. EST. During this time, Canvas login and Penn State’s custom functionality (tools with a PSU shield) within Canvas will be unavailable. An update to this alert will be posted once maintenance is complete.﻿]]></description>
+<pubDate>Mon, 29 Jan 2018 14:28:12 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[Resolved: PASS Homes Metadata Disk Replacement]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4907</link>
+<description><![CDATA[Metatdata disks used by the PASS homes file systems will be replaced over several days between Jan 15 and Jan 21. The work should be transparent to PASS users except that users may see an increase in file system latency between 10pm and 5am Jan 17-19 and the following weekend Jan 20-21 as new disks are added to the filesystems and old disks are removed. This change is being tracked in Service Now as CHG0045420.]]></description>
+<pubDate>Sun, 28 Jan 2018 12:11:31 EST</pubDate>
+</item>
+		
+<item>
+<title><![CDATA[Resolved: Configuration change in data center networking]]></title>
+
+<link>http://alerts.its.psu.edu/alert-4928</link>
+<description><![CDATA[This work has been completed successfully as of 4:17am]]></description>
+<pubDate>Sat, 27 Jan 2018 04:19:00 EST</pubDate>
+</item></channel>
+</rss>
+

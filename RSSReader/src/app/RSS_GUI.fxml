@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="537.0" prefWidth="947.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+    <AnchorPane layoutX="278.0" layoutY="253.0" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+      <ScrollPane layoutX="30.0" layoutY="62.0" prefHeight="452.0" prefWidth="137.0">
+         <content>
+            <TextArea prefHeight="452.0" prefWidth="124.0" />
+         </content>
+      </ScrollPane>
+      <TableView layoutX="186.0" layoutY="62.0" prefHeight="241.0" prefWidth="725.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Headline" />
+          <TableColumn prefWidth="75.0" text="Date" />
+        </columns>
+      </TableView>
+      <ScrollPane layoutX="187.0" layoutY="314.0" prefHeight="200.0" prefWidth="725.0">
+         <content>
+            <TextArea prefHeight="200.0" prefWidth="737.0" />
+         </content>
+      </ScrollPane>
+      <TextField alignment="CENTER" layoutX="395.0" layoutY="24.0" promptText="lbl_title" text="RSS Reader" />
+      <TextField alignment="CENTER" layoutX="30.0" layoutY="24.0" prefHeight="27.0" prefWidth="137.0" promptText="lbl_feed" text="Feed" />
+   </children>
+</AnchorPane>

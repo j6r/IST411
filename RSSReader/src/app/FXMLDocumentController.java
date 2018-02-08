@@ -6,6 +6,7 @@
 package app;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,7 +19,8 @@ import rssitem.Item;
  * @author redjen
  */
 public class FXMLDocumentController implements Initializable {
-
+    ArrayList <Item> newslist = new ArrayList();
+    
     @FXML
     private TableView<Item> tableView;
     @FXML
@@ -38,7 +40,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+      
     }
 
 }

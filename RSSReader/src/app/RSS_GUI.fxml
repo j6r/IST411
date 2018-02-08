@@ -6,8 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="537.0" prefWidth="947.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane id="AnchorPane" prefHeight="537.0" prefWidth="947.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.FXMLDocumentController">
    <children>
     <AnchorPane layoutX="278.0" layoutY="253.0" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
       <ScrollPane layoutX="30.0" layoutY="62.0" prefHeight="452.0" prefWidth="137.0">
@@ -15,10 +14,12 @@
             <TextArea prefHeight="452.0" prefWidth="124.0" />
          </content>
       </ScrollPane>
-      <TableView layoutX="186.0" layoutY="62.0" prefHeight="241.0" prefWidth="725.0">
+      <TableView fx:id="rssTable" layoutX="186.0" layoutY="62.0" prefHeight="241.0" prefWidth="725.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Headline" />
-          <TableColumn prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="titleCol" editable="false" prefWidth="75.0" text="Title" />
+          <TableColumn fx:id="linkCol" editable="false" prefWidth="75.0" text="Link" />
+            <TableColumn fx:id="descriptCol" editable="false" prefWidth="111.0" text="Description" />
+            <TableColumn fx:id="dateCol" editable="false" prefWidth="78.0" text="Date" />
         </columns>
       </TableView>
       <ScrollPane layoutX="187.0" layoutY="314.0" prefHeight="200.0" prefWidth="725.0">

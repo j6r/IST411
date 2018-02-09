@@ -2,6 +2,7 @@ package rssitem;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javafx.beans.property.*;
 
 /**
  * Item for an RSS feed. This is a POJO model class providing the attributes and
@@ -14,56 +15,112 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Item {
 
-   private String title;
-   private String link;
-   private String description;
-   private String date;
+   private StringProperty title;
+   private StringProperty link;
+   private StringProperty description;
+   private StringProperty date;
 
    /**
     * Constructs a new item
     */
    public Item() {
+      this.title = new SimpleStringProperty();
+      this.link = new SimpleStringProperty();
+      this.description = new SimpleStringProperty();
+      this.date = new SimpleStringProperty();
    }
-
-   public String getTitle() {
+   
+   /**
+    * @return the StringProperty title
+    */
+   public StringProperty getTitleProperty() {
       return title;
    }
-
+   
+   /**
+    * @return the title
+    */
+   public String getTitle() {
+       return title.get();
+   }
+   
+   /**
+    * @param title the title to set
+    */
    @XmlElement
    public void setTitle(String title) {
-      this.title = title;
+      this.title.set(title);
    }
-
-   public String getLink() {
+   
+   /**
+    * @return the StringProperty link
+    */
+   public StringProperty getLinkProperty() {
       return link;
    }
-
+   
+   /**
+    * @return the link
+    */
+   public String getLink() {
+       return link.get();
+   }
+   
+   /**
+    * @param link the link to set
+    */
    @XmlElement
    public void setLink(String link) {
-      this.link = link;
+      this.link.set(link);
    }
-
-   public String getDescription() {
+   
+   /**
+    * @return the StringProperty description
+    */
+   public StringProperty getDescriptionProperty() {
       return description;
    }
-
+   
+   /**
+    * @return the description
+    */
+   public String getDescription() {
+       return description.get();
+   }
+   
+   /**
+    * @param description the description to set
+    */
    @XmlElement
    public void setDescription(String description) {
-      this.description = description;
+      this.description.set(description);
    }
-
-   public String getDate() {
+   
+   /**
+    * @return the StringProperty date
+    */
+   public StringProperty getDateProperty() {
       return date;
    }
-
-   @XmlElement
+   
+   /**
+    * @return the date
+    */
+   public String getDate() {
+       return date.get();
+   }
+   
+   /**
+    * @param date the date to set
+    */
+   @XmlElement(name = "pubDate")
    public void setDate(String date) {
-      this.date = date;
+      this.date.set(date);
    }
 
    @Override
    public String toString() {
-      return title;
+      return title.toString();
    }
 
 }

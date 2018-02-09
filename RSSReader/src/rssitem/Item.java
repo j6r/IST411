@@ -24,6 +24,10 @@ public class Item {
     * Constructs a new item
     */
    public Item() {
+      this.title = new SimpleStringProperty();
+      this.link = new SimpleStringProperty();
+      this.description = new SimpleStringProperty();
+      this.date = new SimpleStringProperty();
    }
    
    /**
@@ -109,7 +113,7 @@ public class Item {
    /**
     * @param date the date to set
     */
-   @XmlElement
+   @XmlElement(name = "pubDate")
    public void setDate(String date) {
       this.date.set(date);
    }

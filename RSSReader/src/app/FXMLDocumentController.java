@@ -12,27 +12,29 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import rssitem.Item;
-import java.util.ArrayList;
 
 /**
  *
  * @author redjen
  */
 public class FXMLDocumentController implements Initializable {
-    //ArrayList <Item> newslist = new ArrayList();
+   
     
     @FXML
     private TableView<Item> rssTable; 
     @FXML
     private TableColumn<Item, String> titleCol;
     @FXML
-    private TableColumn<Item, String> descriptCol;
-    @FXML
     private TableColumn<Item, String> dateCol;
     @FXML
     private TableColumn<Item, String> linkCol;
     private ItemController rss;
+    @FXML
+    private TextArea artDes;
+    
+    
     
     
 
@@ -51,12 +53,17 @@ public class FXMLDocumentController implements Initializable {
     private void populateTable(){
         
         titleCol.setCellValueFactory(cellData -> cellData.getValue().getTitleProperty());
-        descriptCol.setCellValueFactory(cellData -> cellData.getValue().getDescriptionProperty());
         dateCol.setCellValueFactory(cellData -> cellData.getValue().getDateProperty());
         linkCol.setCellValueFactory(cellData -> cellData.getValue().getLinkProperty());
         
         rssTable.setItems(rss.getObservableList());
         
     }
-
+//handles if the mouse is click on a table property
+    public void mHandleClick(){
+          this.artDes.setText(rss.getObservableList().get(this.rssTable.
+                  getSelectionModel().selectedIndexProperty().getValue()).
+                  getDescription());           
+    }
+  
 }

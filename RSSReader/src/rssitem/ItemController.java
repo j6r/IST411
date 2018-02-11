@@ -21,5 +21,6 @@ public class ItemController {
     public ObservableList<Item> getObservableList() {
         return articleList;
     }
-    
+ 
+   
 }

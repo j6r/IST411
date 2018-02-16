@@ -5,16 +5,27 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MyHTTPServer {
+
+   private static final Path DATA_FILE = Paths.get("diary.txt");
 
    public static void main(String[] args) throws Exception {
       System.out.println("MyHTTPServer Started");
@@ -71,16 +82,44 @@ public class MyHTTPServer {
             handleGet(exchange);
          } else if (requestMethod.equalsIgnoreCase("POST")) {
             handlePost(exchange);
+
          }
+      }
+      
+      private void sendResponse(HttpExchange exchange) {
+         
       }
 
       /**
        * Handle post request
        *
-       * @param exchange
-       * @throws IOException
+       * @param exchange the HttpExchange for this request
+       * @throws IOException if an error occurs reading the request data or writing the data file
        */
       private void handlePost(HttpExchange exchange) throws IOException {
+         Logger.getLogger(this.getClass().toString()).log(Level.INFO,
+                 String.format("Processing post request (%d bytes)", exchange.getRequestBody().available()));
+
+         if (!Files.exists(DATA_FILE)) {
+            Files.createFile(DATA_FILE);
+         }
+
+         try (BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
+                 BufferedWriter fos = Files.newBufferedWriter(DATA_FILE, StandardOpenOption.APPEND)) {
+
+            String inputLine;
+            
+            // record date
+            fos.write(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE));
+            fos.write("\n\n");
+
+            while ((inputLine = br.readLine()) != null) {
+               fos.write(inputLine);
+               fos.write("\n\n");
+            }
+
+            fos.close();
+         }
 
       }
 

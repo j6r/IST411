@@ -25,7 +25,26 @@ import java.util.logging.Logger;
 
 public class MyHTTPServer {
 
+   /**
+    * The path to the diary data file
+    */
    private static final Path DATA_FILE = Paths.get("diary.txt");
+
+   /**
+    * The message to send to the client when a new diary entry has been saved
+    */
+   private static final String POST_RESPONSE_SUCCESS = "<html><body>"
+           + "<p>Your entry has been recorded.</p>"
+           + "<p><a href=\"index\">view entries</a></p>"
+           + "</body></html>";
+
+   /**
+    * The message to send tot he client when saving a diary entry fails
+    */
+   private static final String POST_RESPONSE_FAIL = "<html><body>"
+           + "<p>Your entry has been recorded.</p>"
+           + "<p><a href=\"index\">view entries</a></p>"
+           + "</body></html>";
 
    public static void main(String[] args) throws Exception {
       System.out.println("MyHTTPServer Started");
@@ -85,32 +104,61 @@ public class MyHTTPServer {
 
          }
       }
-      
-      private void sendResponse(HttpExchange exchange) {
-         
+
+      /**
+       * Sends the specified message to the client and disconnects
+       *
+       * @param exchange the HttpExchange
+       * @param responseMessage the message body
+       * @throws IOException
+       */
+      private void sendResponse(HttpExchange exchange, String responseMessage) throws IOException {
+         // Manage response headers
+         Headers responseHeaders = exchange.getResponseHeaders();
+
+         // Send response headers
+         responseHeaders.set("Content-Type", "text/html");
+         responseHeaders.set("Server", "MyHTTPServer/1.0");
+         responseHeaders.set("Set-cookie", "userID=Cookie Monster");
+         exchange.sendResponseHeaders(200, responseMessage.getBytes().length);
+
+         System.out.println("Response Headers");
+         Set<String> responseHeadersKeySet = responseHeaders.keySet();
+         responseHeadersKeySet
+                 .stream()
+                 .map((key) -> {
+                    List values = responseHeaders.get(key);
+                    String header = key + " = " + values.toString() + "\n";
+                    return header;
+                 })
+                 .forEach((header) -> {
+                    System.out.print(header);
+                 });
+
+         // Send message body
+         try (OutputStream responseBody = exchange.getResponseBody()) {
+            responseBody.write(responseMessage.getBytes());
+         }
       }
 
       /**
        * Handle post request
        *
        * @param exchange the HttpExchange for this request
-       * @throws IOException if an error occurs reading the request data or writing the data file
+       * @throws IOException if an error occurs reading the request data or
+       * writing the data file
        */
       private void handlePost(HttpExchange exchange) throws IOException {
-         Logger.getLogger(this.getClass().toString()).log(Level.INFO,
-                 String.format("Processing post request (%d bytes)", exchange.getRequestBody().available()));
-
-         if (!Files.exists(DATA_FILE)) {
-            Files.createFile(DATA_FILE);
-         }
+         Logger.getLogger(this.getClass().toString()).log(Level.INFO, "Processing post request");
 
          try (BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
-                 BufferedWriter fos = Files.newBufferedWriter(DATA_FILE, StandardOpenOption.APPEND)) {
+                 BufferedWriter fos = Files.newBufferedWriter(DATA_FILE, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
 
             String inputLine;
-            
+
             // record date
-            fos.write(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE));
+            fos.write("\n\n\n");
+            fos.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern("E MMM d, u h:m a")));
             fos.write("\n\n");
 
             while ((inputLine = br.readLine()) != null) {
@@ -118,9 +166,9 @@ public class MyHTTPServer {
                fos.write("\n\n");
             }
 
-            fos.close();
-         }
+            sendResponse(exchange, POST_RESPONSE_SUCCESS);
 
+         }
       }
 
       /**
@@ -149,33 +197,8 @@ public class MyHTTPServer {
          } else {
             System.out.println("Request body is empty");
          }
-         // Manage response headers
-         Headers responseHeaders = exchange.getResponseHeaders();
 
-         // Send response headers
-         String responseMessage = getResponse();
-         responseHeaders.set("Content-Type", "text/html");
-         responseHeaders.set("Server", "MyHTTPServer/1.0");
-         responseHeaders.set("Set-cookie", "userID=Cookie Monster");
-         exchange.sendResponseHeaders(200, responseMessage.getBytes().length);
-
-         System.out.println("Response Headers");
-         Set<String> responseHeadersKeySet = responseHeaders.keySet();
-         responseHeadersKeySet
-                 .stream()
-                 .map((key) -> {
-                    List values = responseHeaders.get(key);
-                    String header = key + " = " + values.toString() + "\n";
-                    return header;
-                 })
-                 .forEach((header) -> {
-                    System.out.print(header);
-                 });
-
-         // Send message body
-         try (OutputStream responseBody = exchange.getResponseBody()) {
-            responseBody.write(responseMessage.getBytes());
-         }
+         sendResponse(exchange, getResponse());
       }
    }
 }

@@ -18,7 +18,7 @@ public class MyHTTPServer {
 
    public static void main(String[] args) throws Exception {
       System.out.println("MyHTTPServer Started");
-      HttpServer server = HttpServer.create(new InetSocketAddress(80), 0);
+      HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
       server.createContext("/index", new DetailHandler());
       server.setExecutor(Executors.newCachedThreadPool());
       server.setExecutor(Executors.newFixedThreadPool(5));
@@ -64,55 +64,78 @@ public class MyHTTPServer {
             System.out.print(header);
          }
 
-         // Process GET request
+         // Process request
          String requestMethod = exchange.getRequestMethod();
+
          if (requestMethod.equalsIgnoreCase("GET")) {
-            // Process request body
-            System.out.println("Request Body");
-            InputStream in = exchange.getRequestBody();
-            if (in != null) {
-               try (BufferedReader br = new BufferedReader(
-                       new InputStreamReader(in));) {
-                  String inputLine;
-                  StringBuilder response = new StringBuilder();
-                  while ((inputLine = br.readLine()) != null) {
-                     response.append(inputLine);
-                  }
-                  br.close();
-                  System.out.println(inputLine);
-               } catch (IOException ex) {
-                  ex.printStackTrace();
+            handleGet(exchange);
+         } else if (requestMethod.equalsIgnoreCase("POST")) {
+            handlePost(exchange);
+         }
+      }
+
+      /**
+       * Handle post request
+       *
+       * @param exchange
+       * @throws IOException
+       */
+      private void handlePost(HttpExchange exchange) throws IOException {
+
+      }
+
+      /**
+       * Process get request
+       *
+       * @param exchange the HTTPExchange
+       * @throws IOException
+       */
+      private void handleGet(HttpExchange exchange) throws IOException {
+         // Process request body
+         System.out.println("Request Body");
+         InputStream in = exchange.getRequestBody();
+         if (in != null) {
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(in));) {
+               String inputLine;
+               StringBuilder response = new StringBuilder();
+               while ((inputLine = br.readLine()) != null) {
+                  response.append(inputLine);
                }
-            } else {
-               System.out.println("Request body is empty");
+               br.close();
+               System.out.println(inputLine);
+            } catch (IOException ex) {
+               ex.printStackTrace();
             }
-            // Manage response headers
-            Headers responseHeaders = exchange.getResponseHeaders();
+         } else {
+            System.out.println("Request body is empty");
+         }
+         // Manage response headers
+         Headers responseHeaders = exchange.getResponseHeaders();
 
-            // Send response headers
-            String responseMessage = getResponse();
-            responseHeaders.set("Content-Type", "text/html");
-            responseHeaders.set("Server", "MyHTTPServer/1.0");
-            responseHeaders.set("Set-cookie", "userID=Cookie Monster");
-            exchange.sendResponseHeaders(200, responseMessage.getBytes().length);
+         // Send response headers
+         String responseMessage = getResponse();
+         responseHeaders.set("Content-Type", "text/html");
+         responseHeaders.set("Server", "MyHTTPServer/1.0");
+         responseHeaders.set("Set-cookie", "userID=Cookie Monster");
+         exchange.sendResponseHeaders(200, responseMessage.getBytes().length);
 
-            System.out.println("Response Headers");
-            Set<String> responseHeadersKeySet = responseHeaders.keySet();
-            responseHeadersKeySet
-                    .stream()
-                    .map((key) -> {
-                       List values = responseHeaders.get(key);
-                       String header = key + " = " + values.toString() + "\n";
-                       return header;
-                    })
-                    .forEach((header) -> {
-                       System.out.print(header);
-                    });
+         System.out.println("Response Headers");
+         Set<String> responseHeadersKeySet = responseHeaders.keySet();
+         responseHeadersKeySet
+                 .stream()
+                 .map((key) -> {
+                    List values = responseHeaders.get(key);
+                    String header = key + " = " + values.toString() + "\n";
+                    return header;
+                 })
+                 .forEach((header) -> {
+                    System.out.print(header);
+                 });
 
-            // Send message body
-            try (OutputStream responseBody = exchange.getResponseBody()) {
-               responseBody.write(responseMessage.getBytes());
-            }
+         // Send message body
+         try (OutputStream responseBody = exchange.getResponseBody()) {
+            responseBody.write(responseMessage.getBytes());
          }
       }
    }

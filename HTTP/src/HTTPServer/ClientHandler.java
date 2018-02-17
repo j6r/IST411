@@ -1,15 +1,45 @@
 package HTTPServer;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientHandler implements Runnable {
 
    private final Socket socket;
+
+   /**
+    * The path to the diary data file
+    */
+   private static final Path DATA_FILE = Paths.get("diary.txt");
+
+   /**
+    * The message to send to the client when a new diary entry has been saved
+    */
+   private static final String POST_RESPONSE_SUCCESS = "<html><body>"
+           + "<p>Your entry has been recorded.</p>"
+           + "<p><a href=\"index\">view entries</a></p>"
+           + "</body></html>";
+
+   /**
+    * The message to send tot he client when saving a diary entry fails
+    */
+   private static final String POST_RESPONSE_FAIL = "<html><body>"
+           + "<p>Your entry has been recorded.</p>"
+           + "<p><a href=\"index\">view entries</a></p>"
+           + "</body></html>";
+
+   private static final Logger LOG = Logger.getLogger(ClientHandler.class.getName());
 
    public ClientHandler(Socket socket) {
       this.socket = socket;
@@ -32,11 +62,11 @@ public class ClientHandler implements Runnable {
                  = new StringTokenizer(headerLine);
 
          String httpMethod = tokenizer.nextToken();
-         
+
          if (httpMethod.equals("GET")) {
             handleGetRequest(tokenizer);
          } else if (httpMethod.equals("POST")) {
-            handlePostRequest(tokenizer);
+            handlePostRequest(in);
          } else {
             System.out.println("The HTTP method is not recognized");
             sendResponse(socket, 405, "Method Not Allowed");
@@ -94,7 +124,40 @@ public class ClientHandler implements Runnable {
       sendResponse(socket, 200, responseBuffer.toString());
    }
 
-   private void handlePostRequest(StringTokenizer tokenizer) {
-      // TODO
+   /**
+    * Handles post requests by adding the message content to the diary data file
+    *
+    * @param br bufferedReader for the request
+    * @throws IOException if an error occurs reading data from the request or
+    * writing data to file
+    */
+   private void handlePostRequest(BufferedReader br) throws IOException {
+
+      LOG.log(Level.INFO, "Processing POST request");
+      String inputLine;
+
+      try (BufferedWriter fos = Files.newBufferedWriter(DATA_FILE,
+              StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
+
+         inputLine = br.readLine();
+         while (inputLine != null && !inputLine.isEmpty()) {
+            inputLine = br.readLine();
+         }
+
+         while ((inputLine = br.readLine()) != null) {
+            fos.write(inputLine);
+            fos.write("\n\n");
+            fos.flush();
+         }
+
+         sendResponse(socket, 200, POST_RESPONSE_SUCCESS);
+
+      } catch (IOException ex) {
+         LOG.log(Level.SEVERE, "Error occured while rocessing POST request", ex);
+         sendResponse(socket, 200, POST_RESPONSE_FAIL);
+         throw ex;
+      }
+
    }
+
 }

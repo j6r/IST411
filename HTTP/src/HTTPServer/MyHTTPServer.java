@@ -52,7 +52,6 @@ public class MyHTTPServer {
     * The message to send to the client when the diary was unsuccessfully loaded
     */
    private static final String GET_FAIL = "Failed to read diary";
-   
    public static void main(String[] args) throws Exception {
       System.out.println("MyHTTPServer Started");
       HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);

@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -45,7 +46,12 @@ public class MyHTTPServer {
            + "<p>Your entry has been recorded.</p>"
            + "<p><a href=\"index\">view entries</a></p>"
            + "</body></html>";
-
+   
+   
+   /**
+    * The message to send to the client when the diary was unsuccessfully loaded
+    */
+   private static final String GET_FAIL = "Failed to read diary";
    public static void main(String[] args) throws Exception {
       System.out.println("MyHTTPServer Started");
       HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
@@ -178,27 +184,29 @@ public class MyHTTPServer {
        * @throws IOException
        */
       private void handleGet(HttpExchange exchange) throws IOException {
-         // Process request body
-         System.out.println("Request Body");
-         InputStream in = exchange.getRequestBody();
-         if (in != null) {
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(in));) {
-               String inputLine;
-               StringBuilder response = new StringBuilder();
-               while ((inputLine = br.readLine()) != null) {
-                  response.append(inputLine);
-               }
-               br.close();
-               System.out.println(inputLine);
-            } catch (IOException ex) {
-               ex.printStackTrace();
+        System.out.println("Get method processed");
+        FileReader diaryReader;
+        String line;
+        try {
+            diaryReader = new FileReader(DATA_FILE.toString());
+            BufferedReader diaryBuffer = new BufferedReader(diaryReader);
+            StringBuilder responseBuffer = new StringBuilder();
+            while((line = diaryBuffer.readLine()) != null) {
+                responseBuffer.append(line);
+                responseBuffer.append("</br>");
             }
-         } else {
-            System.out.println("Request body is empty");
-         }
-
-         sendResponse(exchange, getResponse());
-      }
+            if (responseBuffer.toString().equals("")) {
+                sendResponse(exchange, "The diary is empty");
+            }
+            else {
+                sendResponse(exchange, responseBuffer.toString());
+            }
+            diaryBuffer.close();
+        } 
+        catch (IOException e) {
+            System.out.println(GET_FAIL);
+            sendResponse(exchange, GET_FAIL);
+        }
+    }
    }
 }

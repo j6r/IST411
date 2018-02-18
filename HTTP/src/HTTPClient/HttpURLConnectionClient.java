@@ -24,12 +24,12 @@ public class HttpURLConnectionClient {
 
     private void sendGet() {
         try {
-            String urlQuery = "http://www.google.com/search?q=";
+            String urlQuery = "http://localhost:8080";
             String userQuery = "java sdk";
             String urlEncoded = urlQuery + URLEncoder.encode(userQuery, "UTF-8");
             System.out.println(urlEncoded);
 
-            String query = "http://www.google.com/search?q=java+sdk&ie=utf-8&oe=utf-8";
+            String query = "http://localhost:8080?q=java+sdk&ie=utf-8&oe=utf-8";
             URL url = new URL(query);
 //            url = new URL(urlEncoded);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

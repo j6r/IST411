@@ -55,6 +55,7 @@ public class MyHTTPServer {
    public static void main(String[] args) throws Exception {
       System.out.println("MyHTTPServer Started");
       HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+      server.createContext("/", new DetailHandler());
       server.createContext("/index", new DetailHandler());
       server.setExecutor(Executors.newCachedThreadPool());
       server.setExecutor(Executors.newFixedThreadPool(5));

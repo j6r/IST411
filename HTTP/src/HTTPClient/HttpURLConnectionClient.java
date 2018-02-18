@@ -94,7 +94,8 @@ public class HttpURLConnectionClient {
         String url = "http://localhost:8080";   
         try {
             URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            HttpURLConnection connection = 
+                    (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0");
             connection.setDoOutput(true);
@@ -107,11 +108,11 @@ public class HttpURLConnectionClient {
             Scanner scan = new Scanner(System.in);
             String inputString = scan.nextLine();  
           
-            DataOutputStream wr = 
-                    new DataOutputStream(connection.getOutputStream());
-            wr.writeBytes(inputString);
-            wr.flush();
-            wr.close();
+            try (DataOutputStream wr = 
+                    new DataOutputStream(connection.getOutputStream())) {
+                wr.writeBytes(inputString);
+                wr.flush();
+            }
             
             
             BufferedReader in =

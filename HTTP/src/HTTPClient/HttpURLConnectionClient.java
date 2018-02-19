@@ -1,14 +1,17 @@
 package HTTPClient;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class HttpURLConnectionClient {
@@ -17,8 +20,7 @@ public class HttpURLConnectionClient {
 
     public static void main(String[] args) throws Exception {
         HttpURLConnectionClient http = new HttpURLConnectionClient();
-        System.out.println("Sent Http GET request");
-        http.sendGet();
+        http.sendPost();
 
     }
 
@@ -83,6 +85,52 @@ public class HttpURLConnectionClient {
             ex.printStackTrace();
         }
         return "";
+    }
+    private void sendPost(){
+        
+       
+        String url = "http://localhost:8080";   
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection connection = 
+                    (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.setDoOutput(true);
+            
+   
+            System.out.println("***************");
+            System.out.println("Sending 'POST' request to URL: "+ url);
+     
+            System.out.println("Enter Text:  ");
+            Scanner scan = new Scanner(System.in);
+            String inputString = scan.nextLine();  
+          
+            try (DataOutputStream wr = 
+                    new DataOutputStream(connection.getOutputStream())) {
+                wr.writeBytes(inputString);
+                wr.flush();
+            }
+            
+            
+            BufferedReader in =
+                    new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()));
+          
+            
+            System.out.println(this.getResponse(connection));
+
+            
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (ProtocolException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        
+        
     }
 
 }

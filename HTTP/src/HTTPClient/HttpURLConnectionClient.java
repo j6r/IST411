@@ -20,8 +20,6 @@ public class HttpURLConnectionClient {
 
     public static void main(String[] args) throws Exception {
         HttpURLConnectionClient http = new HttpURLConnectionClient();
-        System.out.println("Sent Http GET request");
-        http.sendGet();
         http.sendPost();
 
     }

@@ -38,3 +38,4 @@ nbdist/
 
 # Class data
 diary.txt
+/JAXRS/target/

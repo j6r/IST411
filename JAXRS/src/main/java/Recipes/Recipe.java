@@ -58,10 +58,9 @@ public class Recipe {
         return -1;
     }
 
-    public String queryIngredients(String inName) {
+    public void queryIngredients(String inName) {
 
-        int position = this.findIngredient(inName);
-        return this.ingredients.get(position).getDishIngredients();
+     
     }
 
 }

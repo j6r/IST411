@@ -6,26 +6,22 @@
 package Recipes;
 
 import java.util.ArrayList;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
+
 
 /**
  *
  * @author Single-eye
  */
 public class RecipeDAO {
-    
-    private ArrayList<Recipe> Cookbook = new ArrayList();
-    
 
-    public void objToJSon() {
-        
+
+    public void objToJSon(String name, ArrayList Cookbook) {
+
         
         
     }
 
-    public void displayJSon() {
+    public void jsonToObj() {
 
     }
 

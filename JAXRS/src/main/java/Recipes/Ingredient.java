@@ -11,16 +11,23 @@ package Recipes;
  */
 public class Ingredient {
     
-private String dishIngredient; 
+private String ingredientName; 
     
  public Ingredient(String inIngredient){
      
-     this.dishIngredient = inIngredient;
+     this.ingredientName = inIngredient;
      
  }   
-public String getDishIngredients(){
+public String getIngredientName(){
     
-    return this.dishIngredient;
+    return this.ingredientName;
 }
+
+@Override
+public String toString(){
+
+    return this.getIngredientName();
     
+
+} 
 }

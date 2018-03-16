@@ -32,19 +32,52 @@ public class Recipe {
         }
 
     }
-    public Recipe(String inName, ArrayList ingredients){
-        
-        this.name = inName;
-        this.recipeIngredientList = ingredients;  
-    }
-      private String getName() {
 
+    public Recipe(String inName, ArrayList ingredients) {
+        this.name = inName;
+        this.recipeIngredientList = ingredients;
+    }
+
+    public String getName() {
         return name;
     }
-    public int getRecipeID(){
+
+    public int getRecipeID() {
         return this.ID;
-        
+
     }
+
+    public void addRecipeIngredient(Ingredient inIngredient) {
+
+        int position = findRecipeIngredient(inIngredient);
+
+        try {
+            if (position < 0) {
+
+                this.recipeIngredientList.add(inIngredient);
+
+            }
+        } catch (Exception e) {
+            // exception handling needs coding
+        }
+
+    }
+
+    public void deleteRecipeIngredient() {
+
+        int position = findRecipeIngredient(name);
+        try {
+            if (position > 0) {
+
+                recipeIngredientList.remove(position);
+
+            }
+        } catch (Exception e) {
+            // exception handling needs coding
+        }
+
+    }
+
     private int findRecipeIngredient(Ingredient inIngredient) {
 
         return this.recipeIngredientList.indexOf(inIngredient);
@@ -54,18 +87,17 @@ public class Recipe {
     private int findRecipeIngredient(String inName) {
 
         for (int i = 0; i < this.recipeIngredientList.size(); i++) {
-            if (this.recipeIngredientList.get(i).getDishIngredients().contains(name)) {
+            if (this.recipeIngredientList.get(i).getIngredientName().contains(inName)) {
                 return i;
             }
         }
         return -1;
     }
-    
-    private ArrayList getIngredientsList() {
+
+    public ArrayList getIngredientsList() {
 
         return this.recipeIngredientList;
 
     }
-   
-   
+
 }

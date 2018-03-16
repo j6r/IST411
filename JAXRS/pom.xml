@@ -27,6 +27,11 @@
             <version>2.0.1</version><!-- set the tight version -->
             <scope>provided</scope><!-- compile time dependency -->
         </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>

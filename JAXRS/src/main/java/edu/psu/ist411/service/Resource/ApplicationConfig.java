@@ -1,5 +1,5 @@
 
-package edu.psu.ist411.service;
+package edu.psu.ist411.service.Resource;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -22,7 +22,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(edu.psu.ist411.service.RecipeResource.class);
+        resources.add(edu.psu.ist411.service.Resource.RecipeResource.class);
     }
     
 }

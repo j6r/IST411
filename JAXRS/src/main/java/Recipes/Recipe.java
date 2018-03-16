@@ -13,54 +13,59 @@ import java.util.ArrayList;
  */
 public class Recipe {
 
+    private int ID;
     private String name = " ";
-    private ArrayList<Ingredient> ingredients = new ArrayList();
+    private ArrayList<Ingredient> recipeIngredientList = new ArrayList();
 
-    public Recipe(String inName, Ingredient... args) {
+    public Recipe(int recipeID, String inName, Ingredient... ingredients) {
 
+        this.ID = recipeID;
         this.name = inName;
 
-        for (Ingredient i : args) {
+        for (Ingredient i : ingredients) {
 
-            int foundIngredient = this.findIngredient(i);
+            int foundIngredient = this.findRecipeIngredient(i);
 
             if (foundIngredient < 0) {
-                this.getIngredients().add(i);
+                this.recipeIngredientList.add(i);
             }
         }
 
     }
-
-    private String getName() {
+    public Recipe(String inName, ArrayList ingredients){
+        
+        this.name = inName;
+        this.recipeIngredientList = ingredients;  
+    }
+      private String getName() {
 
         return name;
     }
+    public int getRecipeID(){
+        return this.ID;
+        
+    }
+    private int findRecipeIngredient(Ingredient inIngredient) {
 
-    private ArrayList getIngredients() {
-
-        return this.ingredients;
+        return this.recipeIngredientList.indexOf(inIngredient);
 
     }
 
-    private int findIngredient(Ingredient inIngredient) {
+    private int findRecipeIngredient(String inName) {
 
-        return this.ingredients.indexOf(inIngredient);
-
-    }
-
-    private int findIngredient(String inName) {
-
-        for (int i = 0; i < this.ingredients.size(); i++) {
-            if (this.ingredients.get(i).getDishIngredients().contains(name)) {
+        for (int i = 0; i < this.recipeIngredientList.size(); i++) {
+            if (this.recipeIngredientList.get(i).getDishIngredients().contains(name)) {
                 return i;
             }
         }
         return -1;
     }
+    
+    private ArrayList getIngredientsList() {
 
-    public void queryIngredients(String inName) {
+        return this.recipeIngredientList;
 
-     
     }
-
+   
+   
 }

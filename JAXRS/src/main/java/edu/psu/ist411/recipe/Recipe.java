@@ -75,6 +75,10 @@ public class Recipe {
         }
         return result;
     }
+    
+    public HashSet<String> getRecipeIngredients() {
+       return recipeIngredientList;
+    }
 
    @Override
    public boolean equals(Object obj) {

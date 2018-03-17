@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Recipes;
+package edu.psu.ist411.recipe;
 
+import edu.psu.ist411.recipe.RecipeDAO;
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,7 @@ import static org.junit.Assert.*;
 public class RecipeDAOTest {
     
     public RecipeDAOTest() {
+        this.testJsonToObj();
     }
     
     @Before
@@ -29,13 +32,12 @@ public class RecipeDAOTest {
         System.out.println("objToJSon");
         RecipeDAO instance = new RecipeDAO();
         String inName = "lamb saag";
-        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        Ingredient a = new Ingredient("Salt");
-        Ingredient b = new Ingredient("Pepper");
-        
-        ingredients.add(a);
-        ingredients.add(b);
-        JsonObject json = instance.objToJSon(inName, ingredients);
+        HashSet<String> ingredients = new HashSet();
+        ingredients.add("Salt");
+        ingredients.add("Pepper");
+        ingredients.add("Love");
+
+        JsonObject json = instance.objToJSon(10,inName, ingredients);
         assertNotNull(instance);
         assertNotNull(json);
     }
@@ -45,7 +47,8 @@ public class RecipeDAOTest {
         System.out.println("jsonToObj");
         RecipeDAO instance = new RecipeDAO();
         instance.jsonToObj();
-        fail("The test case is a prototype.");
+        
+     
     }
 
 }

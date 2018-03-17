@@ -15,7 +15,6 @@ import javax.json.JsonObject;
 import javax.json.JsonWriter;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import javax.json.JsonArray;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
@@ -73,6 +72,8 @@ public class RecipeDAO {
       recipe = new Recipe(id, name, ingredients);
       saveRecipe(recipe);
 
+      saveAll();
+      
       return recipe;
    }
 
@@ -91,6 +92,8 @@ public class RecipeDAO {
          recipes.remove(recipe);
          recipes.add(recipe);
       }
+      
+      saveAll();
    }
 
    /**
@@ -105,7 +108,7 @@ public class RecipeDAO {
             iterator.remove();
             break;
          }
-      }
+      }saveAll();
    }
 
    public JsonObject objToJSon(int inID, String inName, HashSet<String> ingredients) {
@@ -137,21 +140,8 @@ public class RecipeDAO {
       recipeBuilder.add("ingredients", ingredientsArray);
       JsonObject recipe = recipeBuilder.build();
 
-      try {
-         OutputStream out = new FileOutputStream(DATA_FILE);
-         JsonWriter jsonWriter = Json.createWriter(out);
-         jsonWriter.writeObject(recipe);
-         System.out.println(recipe);
-         out.close();
-         jsonWriter.close();
-         return recipe;
+      return recipe;
 
-      } catch (FileNotFoundException ex) {
-
-      } catch (IOException ex) {
-
-      }
-      return null;
    }
 
    public void jsonToObj() {
@@ -181,6 +171,32 @@ public class RecipeDAO {
          Recipe JsonRecipe = new Recipe(iD, name, ingredients);
 
       } catch (UnsupportedEncodingException ex) {
+
+      } catch (IOException ex) {
+
+      }
+
+   }
+
+   protected void saveAll() {
+
+      JsonArrayBuilder outBuilder = Json.createArrayBuilder();
+      JsonArray outArray;
+
+      for (Recipe recipe : recipes) {
+         JsonObject jo = objToJSon(recipe.getRecipeID(), recipe.getName(), recipe.getRecipeIngredients());
+         if (jo != null) {
+            outBuilder.add(jo);
+         }
+      }
+
+      outArray = outBuilder.build();
+
+      try (OutputStream out = new FileOutputStream(DATA_FILE);
+              JsonWriter jsonWriter = Json.createWriter(out);) {
+         jsonWriter.writeArray(outArray);
+         out.flush();
+      } catch (FileNotFoundException ex) {
 
       } catch (IOException ex) {
 

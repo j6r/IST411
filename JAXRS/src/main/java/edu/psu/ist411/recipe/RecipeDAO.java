@@ -1,20 +1,20 @@
 package edu.psu.ist411.recipe;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonWriter;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.json.JsonArray;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
@@ -30,8 +30,16 @@ public class RecipeDAO {
    private int lastId;
    private HashSet<Recipe> recipes;
 
-   public RecipeDAO() {
+   public RecipeDAO() throws IOException {
+      Path data = Paths.get(DATA_FILE);
       recipes = new HashSet<>();
+      
+      if (!Files.exists(Paths.get(DATA_FILE))) {
+         Files.createFile(Paths.get(DATA_FILE));
+         saveAll();
+      }
+
+      jsonToObj();
    }
 
    /**
@@ -73,7 +81,7 @@ public class RecipeDAO {
       saveRecipe(recipe);
 
       saveAll();
-      
+
       return recipe;
    }
 
@@ -92,7 +100,7 @@ public class RecipeDAO {
          recipes.remove(recipe);
          recipes.add(recipe);
       }
-      
+
       saveAll();
    }
 
@@ -108,7 +116,8 @@ public class RecipeDAO {
             iterator.remove();
             break;
          }
-      }saveAll();
+      }
+      saveAll();
    }
 
    public JsonObject objToJSon(int inID, String inName, HashSet<String> ingredients) {
@@ -146,38 +155,50 @@ public class RecipeDAO {
 
    public void jsonToObj() {
 
-      try {
-         InputStream inputStream = new FileInputStream("Recipe.json");
+      recipes.clear();
 
-         Reader reader = new InputStreamReader(inputStream, "UTF-8");
-         JsonReader jsonReader = Json.createReader(reader);
-         JsonObject jsonRecipe = jsonReader.readObject();
+      try (InputStreamReader inputStream = new InputStreamReader(Files.newInputStream(Paths.get(DATA_FILE)));
+              JsonReader jsonReader = Json.createReader(inputStream)) {
 
-         int iD = jsonRecipe.getInt("recipeID");
-         System.out.println(iD);
-         String name = jsonRecipe.getString("recipeName");
-         System.out.println(name);
+         JsonArray records = jsonReader.readArray();
 
-         JsonArray ingredientArray;
-         HashSet<String> ingredients = new HashSet();
-         ingredientArray = jsonRecipe.getJsonArray("ingredients");
-         for (JsonValue i : ingredientArray) {
-            JsonObject jsonObject = (JsonObject) i;
-            String holder = jsonObject.getString("ingredientName");
-            System.out.println("*****" + holder);
-            ingredients.add(holder);
+         for (JsonValue record : records) {
+            if (record.getValueType().equals(JsonValue.ValueType.OBJECT)) {
+               JsonObject jsonRecipe = (JsonObject) record;
+
+               int iD = jsonRecipe.getInt("recipeID");
+               System.out.println(iD);
+               String name = jsonRecipe.getString("recipeName");
+               System.out.println(name);
+
+               JsonArray ingredientArray;
+               HashSet<String> ingredients = new HashSet();
+               ingredientArray = jsonRecipe.getJsonArray("ingredients");
+               for (JsonValue i : ingredientArray) {
+                  JsonObject jsonObject = (JsonObject) i;
+                  String holder = jsonObject.getString("ingredientName");
+                  System.out.println("*****" + holder);
+                  ingredients.add(holder);
+               }
+
+               Recipe JsonRecipe = new Recipe(iD, name, ingredients);
+               recipes.add(JsonRecipe);
+               
+               if (iD > lastId) {
+                  lastId = iD;
+               }
+            }
          }
 
-         Recipe JsonRecipe = new Recipe(iD, name, ingredients);
-
-      } catch (UnsupportedEncodingException ex) {
-
       } catch (IOException ex) {
-
+         Logger.getLogger(RecipeDAO.class.getName()).log(Level.SEVERE, null, ex);
       }
 
    }
 
+   /**
+    * Saves all recipes, overwriting any existing data
+    */
    protected void saveAll() {
 
       JsonArrayBuilder outBuilder = Json.createArrayBuilder();
@@ -192,14 +213,12 @@ public class RecipeDAO {
 
       outArray = outBuilder.build();
 
-      try (OutputStream out = new FileOutputStream(DATA_FILE);
+      try (OutputStream out = Files.newOutputStream(Paths.get(DATA_FILE), StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
               JsonWriter jsonWriter = Json.createWriter(out);) {
          jsonWriter.writeArray(outArray);
          out.flush();
-      } catch (FileNotFoundException ex) {
-
       } catch (IOException ex) {
-
+         System.err.println(ex.getMessage());
       }
 
    }

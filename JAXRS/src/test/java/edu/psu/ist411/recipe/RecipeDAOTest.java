@@ -5,12 +5,11 @@
  */
 package edu.psu.ist411.recipe;
 
-import edu.psu.ist411.recipe.RecipeDAO;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
 import javax.json.JsonObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -26,13 +25,14 @@ public class RecipeDAOTest {
    public RecipeDAOTest() {
    }
 
+   @After
    @Before
    public void setUp() throws Exception {
-      Files.delete(Paths.get(DATA_FILE));
+      Files.deleteIfExists(Paths.get(DATA_FILE));
    }
 
    @Test
-   public void testObjToJSon() {
+   public void testObjToJSon() throws Exception {
       System.out.println("objToJSon");
       RecipeDAO instance = new RecipeDAO();
       String inName = "lamb saag";
@@ -47,7 +47,7 @@ public class RecipeDAOTest {
    }
 
    //@Test
-   public void testJsonToObj() {
+   public void testJsonToObj() throws Exception {
       System.out.println("jsonToObj");
       RecipeDAO instance = new RecipeDAO();
       instance.jsonToObj();

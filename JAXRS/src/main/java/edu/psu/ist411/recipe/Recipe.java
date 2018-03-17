@@ -75,5 +75,21 @@ public class Recipe {
         }
         return result;
     }
+    
+    public HashSet<String> getRecipeIngredients() {
+       return recipeIngredientList;
+    }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj != null && obj.getClass().isAssignableFrom(this.getClass())) {
+         Recipe o = (Recipe) obj;
+         return this.ID == o.ID;
+      } else {
+         return false;
+      }
+   }
+    
+    
 
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.psu.ist411.service;
 
 import edu.psu.ist411.recipe.Recipe;
@@ -20,16 +15,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 /**
- * REST Web Service
+ * NewRecipeResource is a RESTFul web service for creating new recipes.
  *
- * @author redjen
  */
 @Path("recipes/new")
 public class NewRecipeResource {
 
    @Context
    private UriInfo context;
-   
+
    private static final String RETURN_TEMPLATE = "<html><head></head>"
            + "<body><div>Your recipe was created successfully!"
            + "To view it click <a href='/JAXRS/webresources/recipes/%d'>here</a>.";
@@ -41,7 +35,9 @@ public class NewRecipeResource {
    }
 
    /**
-    * Retrieves representation of an instance of edu.psu.ist411.service.NewRecipeResource
+    * Retrieves representation of an instance of
+    * edu.psu.ist411.service.NewRecipeResource
+    *
     * @return an instance of java.lang.String
     */
    @POST
@@ -51,16 +47,16 @@ public class NewRecipeResource {
       Recipe recipe = null;
       RecipeDAO dao = null;
       HashSet<String> ingredients = new HashSet<>();
-      
+
       try {
          dao = new RecipeDAO();
          recipe = dao.addRecipe(recipeName, ingredients);
          result = String.format(RETURN_TEMPLATE, recipe.getRecipeID());
-         
+
       } catch (IOException ex) {
          Logger.getLogger(NewRecipeResource.class.getName()).log(Level.SEVERE, null, ex);
       }
-      
+
       return result;
    }
 

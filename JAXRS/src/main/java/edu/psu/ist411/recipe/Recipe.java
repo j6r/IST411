@@ -17,9 +17,9 @@ public class Recipe {
     private String name = " ";
     private HashSet<String> recipeIngredientList = new HashSet();
 
-    public Recipe(String inName, String... ingredients) {
+    public Recipe(int inID,String inName, String... ingredients) {
 
-        this.ID = ++ID;
+        this.ID = inID;
         this.name = inName.toLowerCase();
 
         for (String i : ingredients) {

@@ -15,12 +15,12 @@ import java.util.Iterator;
 public class RecipeList {
     
     private HashSet<Recipe> recipeBook = new HashSet();
-    
+ 
     
     
 public RecipeList() {
         
- 
+    
    
 }
 public void addRecipe(Recipe inRecipe){
@@ -69,13 +69,15 @@ public void addRecipe(HashSet<Recipe> inRecipes){
        
          for (Recipe next : recipeBook) {
           if(next.getRecipeID()== id){
-              
+             
+              this.deleteRecipe(next.getRecipeID());
+              this.addRecipe(newRecipe);
+              break;
+             
           }
              
         }
-
-       
-       
+          
    }
    public HashSet<Recipe> retrieveRecipeList(){
        

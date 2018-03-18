@@ -82,8 +82,8 @@ public class RecipeTest {
 
     @Test
     public void testEquals() {
-       Recipe recipe2 = new Recipe(8, "sugar");
-       Recipe recipe3 = new Recipe(10,"Bacon", "pepper","Salt","love");
+       Recipe recipe2 = new Recipe(10,"sugar");
+       Recipe recipe3 = new Recipe(7,"Bacon", "pepper","Salt","love");
        
        assertEquals(recipe, recipe2);
        assertNotEquals(recipe, recipe3);

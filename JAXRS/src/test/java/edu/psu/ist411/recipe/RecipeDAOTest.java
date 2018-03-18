@@ -54,57 +54,5 @@ public class RecipeDAOTest {
 
    }
 
-   @Test
-   public void testAddRecipe() throws Exception {
-
-      RecipeDAO instance = new RecipeDAO();
-
-      HashSet<String> ingredients = new HashSet();
-      ingredients.add("Salt");
-      ingredients.add("Pepper");
-      ingredients.add("Love");
-
-      Recipe recipe1 = instance.addRecipe("test 1", ingredients);
-      Recipe recipe2 = instance.addRecipe("test 2", ingredients);
-
-      assertEquals(recipe1.getName(), instance.getRecipeById(recipe1.getRecipeID()).getName());
-      assertEquals(recipe2.getName(), instance.getRecipeById(recipe2.getRecipeID()).getName());
-   }
-
-   @Test
-   public void testDeleteRecipe() throws Exception {
-
-      RecipeDAO instance = new RecipeDAO();
-
-      HashSet<String> ingredients = new HashSet();
-      ingredients.add("Salt");
-      ingredients.add("Pepper");
-      ingredients.add("Love");
-
-      Recipe recipe1 = instance.addRecipe("test 1", ingredients);
-
-      instance.deleteRecipe(recipe1.getRecipeID());
-
-      assertNull(instance.getRecipeById(recipe1.getRecipeID()));
-   }
-
-   @Test
-   public void testUpdateRecipe() throws Exception {
-      final String expectedName = "new name";
-
-      RecipeDAO instance = new RecipeDAO();
-
-      HashSet<String> ingredients = new HashSet();
-      ingredients.add("Salt");
-      ingredients.add("Pepper");
-      ingredients.add("Love");
-
-      Recipe recipe1 = instance.addRecipe("test 1", ingredients);
-      
-      recipe1.setName(expectedName);
-      instance.saveRecipe(recipe1);
-
-      assertEquals(expectedName, instance.getRecipeById(recipe1.getRecipeID()).getName());
-   }
 
 }

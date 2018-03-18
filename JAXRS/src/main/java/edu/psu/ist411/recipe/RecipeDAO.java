@@ -27,98 +27,21 @@ import javax.json.JsonValue;
 public class RecipeDAO {
 
    private static final String DATA_FILE = "Recipe.json";
-   private int lastId;
-   private HashSet<Recipe> recipes;
+   private RecipeList rList;
 
    public RecipeDAO() throws IOException {
       Path data = Paths.get(DATA_FILE);
-      recipes = new HashSet<>();
+
       
       if (!Files.exists(Paths.get(DATA_FILE))) {
          Files.createFile(Paths.get(DATA_FILE));
          saveAll();
       }
-
-      jsonToObj();
+      this.jsonToObj();
+     
    }
 
-   /**
-    * Returns the specified recipe
-    *
-    * @param id the ID of the recipe
-    * @return the recipe or null if not found
-    */
-   public Recipe getRecipeById(int id) {
-      for (Iterator<Recipe> iterator = recipes.iterator(); iterator.hasNext();) {
-         Recipe next = iterator.next();
-         if (next.getRecipeID() == id) {
-            return next;
-         }
-      }
 
-      return null;
-   }
-
-   /**
-    * Creates and saves a new recipe
-    *
-    * @param name the recipe's name
-    * @param ingredients the recipe's ingredients
-    * @return a new Recipe
-    */
-   public Recipe addRecipe(String name, HashSet<String> ingredients) {
-
-      if (name == null || ingredients == null) {
-         throw new IllegalArgumentException("Name and ingredients are required");
-      }
-
-      Recipe recipe = null;
-
-      lastId++;
-      final int id = lastId;
-
-      recipe = new Recipe(id, name, ingredients);
-      saveRecipe(recipe);
-
-      saveAll();
-
-      return recipe;
-   }
-
-   /**
-    * Saves the specified recipe. Existing recipes are updated.
-    *
-    * @param recipe the recipe to add
-    */
-   public void saveRecipe(Recipe recipe) {
-      if (recipe == null) {
-         throw new IllegalArgumentException("recipe is required");
-      }
-
-      boolean newRecipe = recipes.add(recipe);
-      if (!newRecipe) {
-         recipes.remove(recipe);
-         recipes.add(recipe);
-      }
-
-      saveAll();
-   }
-
-   /**
-    * Deletes the recipe with the specified ID if it exists
-    *
-    * @param id the ID of the recipe to delete
-    */
-   public void deleteRecipe(int id) {
-      for (Iterator<Recipe> iterator = recipes.iterator(); iterator.hasNext();) {
-         Recipe next = iterator.next();
-         if (next.getRecipeID() == id) {
-            iterator.remove();
-            break;
-         }
-      }
-      saveAll();
-   }
 
    public JsonObject objToJSon(int inID, String inName, HashSet<String> ingredients) {
       /*
@@ -155,7 +78,7 @@ public class RecipeDAO {
 
    public void jsonToObj() {
 
-      recipes.clear();
+ 
 
       try (InputStreamReader inputStream = new InputStreamReader(Files.newInputStream(Paths.get(DATA_FILE)));
               JsonReader jsonReader = Json.createReader(inputStream)) {
@@ -182,12 +105,12 @@ public class RecipeDAO {
                }
 
                Recipe JsonRecipe = new Recipe(iD, name, ingredients);
-               recipes.add(JsonRecipe);
-               
-               if (iD > lastId) {
-                  lastId = iD;
-               }
+               this.rList.addRecipe(JsonRecipe);
+  
             }
+            
+          
+            
          }
 
       } catch (IOException ex) {
@@ -204,7 +127,7 @@ public class RecipeDAO {
       JsonArrayBuilder outBuilder = Json.createArrayBuilder();
       JsonArray outArray;
 
-      for (Recipe recipe : recipes) {
+      for (Recipe recipe : this.rList.retrieveRecipeList()) {
          JsonObject jo = objToJSon(recipe.getRecipeID(), recipe.getName(), recipe.getRecipeIngredients());
          if (jo != null) {
             outBuilder.add(jo);

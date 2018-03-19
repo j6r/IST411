@@ -10,6 +10,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
@@ -78,43 +79,56 @@ public class RecipeResource {
      *
      * @param content representation for the resource
      */
+  
     @PUT
-    //@Path("{id}")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response createRecipe(Recipe recipe, @PathParam("id") String test) {
+    
+   @Produces(MediaType.TEXT_HTML)
+    //@Consumes(MediaType.TEXT_PLAIN)
+    public Response createRecipe(@FormParam("recipeId") String recipeId, @FormParam("newRecipeName") String newRecipeName) {
         String response = "";
         RecipeDAO dao = null;
-        if (recipe == null) {
+        if (recipeId == null || newRecipeName == null) {
             //status code 204
             return Response.noContent()
                     .build();
         } else {
-            recipe.getRecipeIngredients();
-            //status code 201
-            return Response.created(context.getAbsolutePath())
-                    .build();
+            try {
+                 dao = new RecipeDAO();
+
+                Recipe recipe = dao.getRecipeById(Integer.parseInt(recipeId));
+                if (recipe != null) {
+                    recipe.setName(newRecipeName);
+                        dao.saveRecipe(recipe);
+                }
+                //status code 201
+                return Response.created(context.getAbsolutePath())
+                        .build();
+                
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
+            return Response.accepted().build();
     }
-
     @DELETE
-    @Path("{id}")   
+    @Path("{deleteId}")   
     @Produces(MediaType.TEXT_PLAIN)
-    public Response delete(@PathParam("id") String test, int i) {
+    public String delete(@PathParam("deleteId") int i) {
         RecipeDAO dao = null;
-       
+       String response = "";
         try {
             dao = new RecipeDAO();
-
-            Recipe recipe = dao.getRecipeById(i);
-            recipe.deleteRecipeIngredient(test);
-            
-            
+            dao.deleteRecipe(i);
+                response = String.format("Recipe ID: %d was deleted",
+                        i);
+            return response;
         } catch (Exception e) {
-            
+            Logger.getLogger(RecipeResource.class.getName()).log(Level.SEVERE, null, e);
+            response = "An exception occurred :(";
             e.printStackTrace();
         }
-        return Response.ok().build();
+        return response;
     }
 
 }

@@ -11,6 +11,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
@@ -59,5 +60,32 @@ public class NewRecipeResource {
 
       return result;
    }
-
+/*
+    @PUT
+   @Produces(MediaType.TEXT_HTML)
+    public String createRecipe(@FormParam("recipeId") String recipeId, @FormParam("newRecipeName") String newRecipeName) {
+        String response = "";
+        RecipeDAO dao = null;
+        if (recipeId == null || newRecipeName == null) {
+            //status code 204
+//            return Response.noContent()
+//                    .build();
+        } else {
+            try {
+             dao = new RecipeDAO();
+             
+            Recipe recipe = dao.getRecipeById(Integer.parseInt(recipeId));
+            if (recipe != null) {
+                recipe.setName(newRecipeName);
+                    dao.saveRecipe(recipe);
+            }
+                //status code 201
+//                return Response.created(context.getAbsolutePath())
+//                        .build();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return response;
+    }*/
 }

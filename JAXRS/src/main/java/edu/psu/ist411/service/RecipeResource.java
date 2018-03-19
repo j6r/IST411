@@ -48,8 +48,8 @@ public class RecipeResource {
          if (recipe == null) {
             response = "Could not find a recipe with that ID";
          } else {
-            response = String.format("Recipe ID: %d%nRecipe name: %s", 
-                    recipe.getRecipeID(), recipe.getName());
+            response = String.format("Recipe ID: %d%nRecipe name: %s%nRecipe description: %s", 
+                    recipe.getRecipeID(), recipe.getName(), recipe.getDescription());
          }
 
       } catch (IOException ex) {

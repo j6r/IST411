@@ -66,7 +66,7 @@ public class RecipeDAO {
     * @param ingredients the recipe's ingredients
     * @return a new Recipe
     */
-   public Recipe addRecipe(String name, HashSet<String> ingredients) {
+   public Recipe addRecipe(String name, String description, HashSet<String> ingredients) {
 
       if (name == null || ingredients == null) {
          throw new IllegalArgumentException("Name and ingredients are required");
@@ -77,7 +77,7 @@ public class RecipeDAO {
       lastId++;
       final int id = lastId;
 
-      recipe = new Recipe(id, name, ingredients);
+      recipe = new Recipe(id, name, description, ingredients);
       saveRecipe(recipe);
 
       saveAll();
@@ -120,7 +120,7 @@ public class RecipeDAO {
       saveAll();
    }
 
-   public JsonObject objToJSon(int inID, String inName, HashSet<String> ingredients) {
+   public JsonObject objToJSon(int inID, String inName, String inDescription, HashSet<String> ingredients) {
       /*
         {"recipeName":"lamb saag",
         "ingredients": [
@@ -146,6 +146,7 @@ public class RecipeDAO {
 
       recipeBuilder.add("recipeID", inID);
       recipeBuilder.add("recipeName", inName);
+      recipeBuilder.add("recipeDescription", inDescription);
       recipeBuilder.add("ingredients", ingredientsArray);
       JsonObject recipe = recipeBuilder.build();
 
@@ -168,8 +169,10 @@ public class RecipeDAO {
 
                int iD = jsonRecipe.getInt("recipeID");
                System.out.println(iD);
-               String name = jsonRecipe.getString("recipeName");
+               String name = jsonRecipe.getString("recipeName");              
                System.out.println(name);
+               String description = jsonRecipe.getString("recipeDescription", "");
+               System.out.println(description);
 
                JsonArray ingredientArray;
                HashSet<String> ingredients = new HashSet();
@@ -181,7 +184,7 @@ public class RecipeDAO {
                   ingredients.add(holder);
                }
 
-               Recipe JsonRecipe = new Recipe(iD, name, ingredients);
+               Recipe JsonRecipe = new Recipe(iD, name, description, ingredients);
                recipes.add(JsonRecipe);
                
                if (iD > lastId) {
@@ -205,7 +208,7 @@ public class RecipeDAO {
       JsonArray outArray;
 
       for (Recipe recipe : recipes) {
-         JsonObject jo = objToJSon(recipe.getRecipeID(), recipe.getName(), recipe.getRecipeIngredients());
+         JsonObject jo = objToJSon(recipe.getRecipeID(), recipe.getName(), recipe.getDescription(), recipe.getRecipeIngredients());
          if (jo != null) {
             outBuilder.add(jo);
          }

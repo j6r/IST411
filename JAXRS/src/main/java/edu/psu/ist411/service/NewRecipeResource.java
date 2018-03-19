@@ -45,7 +45,8 @@ public class NewRecipeResource {
    @POST
    @Produces(MediaType.TEXT_HTML)
    public String getHtml(@FormParam("recipeName") String recipeName,
-           @FormParam("recipeDescription") String recipeDescription) {
+           @FormParam("recipeDescription") String recipeDescription,
+           @FormParam("recipeIngredients") String recipeIngredients) {
       String result = "";
       Recipe recipe = null;
       RecipeDAO dao = null;
@@ -53,6 +54,11 @@ public class NewRecipeResource {
 
       try {
          dao = new RecipeDAO();
+         
+         for (String ingredient : recipeIngredients.split("/")) {
+            ingredients.add(ingredient.toLowerCase());
+         }
+         
          recipe = dao.addRecipe(recipeName, recipeDescription, ingredients);
          result = String.format(RETURN_TEMPLATE, recipe.getRecipeID());
 

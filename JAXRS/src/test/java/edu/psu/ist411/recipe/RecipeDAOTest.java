@@ -36,12 +36,13 @@ public class RecipeDAOTest {
       System.out.println("objToJSon");
       RecipeDAO instance = new RecipeDAO();
       String inName = "lamb saag";
+      String inDescription = "a delicious combination of lamb, spinach, and cream";
       HashSet<String> ingredients = new HashSet();
       ingredients.add("Salt");
       ingredients.add("Pepper");
       ingredients.add("Love");
 
-      JsonObject json = instance.objToJSon(10, inName, ingredients);
+      JsonObject json = instance.objToJSon(10, inName, inDescription, ingredients);
       assertNotNull(instance);
       assertNotNull(json);
    }
@@ -64,8 +65,8 @@ public class RecipeDAOTest {
       ingredients.add("Pepper");
       ingredients.add("Love");
 
-      Recipe recipe1 = instance.addRecipe("test 1", ingredients);
-      Recipe recipe2 = instance.addRecipe("test 2", ingredients);
+      Recipe recipe1 = instance.addRecipe("test 1", "description 1", ingredients);
+      Recipe recipe2 = instance.addRecipe("test 2", "description 2", ingredients);
 
       assertEquals(recipe1.getName(), instance.getRecipeById(recipe1.getRecipeID()).getName());
       assertEquals(recipe2.getName(), instance.getRecipeById(recipe2.getRecipeID()).getName());
@@ -81,7 +82,7 @@ public class RecipeDAOTest {
       ingredients.add("Pepper");
       ingredients.add("Love");
 
-      Recipe recipe1 = instance.addRecipe("test 1", ingredients);
+      Recipe recipe1 = instance.addRecipe("test 1", "description 1", ingredients);
 
       instance.deleteRecipe(recipe1.getRecipeID());
 
@@ -99,7 +100,7 @@ public class RecipeDAOTest {
       ingredients.add("Pepper");
       ingredients.add("Love");
 
-      Recipe recipe1 = instance.addRecipe("test 1", ingredients);
+      Recipe recipe1 = instance.addRecipe("test 1", "description 1", ingredients);
       
       recipe1.setName(expectedName);
       instance.saveRecipe(recipe1);

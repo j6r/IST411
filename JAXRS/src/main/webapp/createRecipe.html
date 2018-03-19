@@ -5,11 +5,28 @@
         <title>Create a new recipe</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            body {
+                margin: 20px;
+            }
+            div {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            textArea {
+                width: 100%;
+                height: 400px;
+            }
+        </style>
     </head>
     <body>
         <form method="POST" action="/JAXRS/webresources/recipes/new">
-            <label for="recipeName">Recipe name:</label>
-            <input type="text" id="recipeName" name="recipeName" />
+            <div>
+                <label for="recipeName">Recipe name:</label>
+                <input type="text" id="recipeName" name="recipeName" />
+            </div>
+            <div>
+                <textarea id="recipeDescription" name="recipeDescription">Enter the recipe's description and steps.</textarea>
             <input type="submit" value="Create" />
         </form>
     </body>

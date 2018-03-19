@@ -38,11 +38,14 @@ public class NewRecipeResource {
     * Retrieves representation of an instance of
     * edu.psu.ist411.service.NewRecipeResource
     *
+    * @param recipeName
+    * @param recipeDescription
     * @return an instance of java.lang.String
     */
    @POST
    @Produces(MediaType.TEXT_HTML)
-   public String getHtml(@FormParam("recipeName") String recipeName) {
+   public String getHtml(@FormParam("recipeName") String recipeName,
+           @FormParam("recipeDescription") String recipeDescription) {
       String result = "";
       Recipe recipe = null;
       RecipeDAO dao = null;
@@ -50,7 +53,7 @@ public class NewRecipeResource {
 
       try {
          dao = new RecipeDAO();
-         recipe = dao.addRecipe(recipeName, ingredients);
+         recipe = dao.addRecipe(recipeName, recipeDescription, ingredients);
          result = String.format(RETURN_TEMPLATE, recipe.getRecipeID());
 
       } catch (IOException ex) {

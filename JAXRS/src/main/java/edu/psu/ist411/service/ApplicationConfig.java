@@ -21,7 +21,7 @@ public class ApplicationConfig extends Application {
     */
    private void addRestResourceClasses(Set<Class<?>> resources) {
       resources.add(edu.psu.ist411.service.NewRecipeResource.class);
-      resources.add(edu.psu.ist411.service.RecipeResource.class);
+        resources.add(edu.psu.ist411.service.RecipeResource.class);
    }
 
 }

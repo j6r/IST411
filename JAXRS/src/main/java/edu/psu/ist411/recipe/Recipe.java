@@ -13,72 +13,84 @@ import java.util.HashSet;
  */
 public class Recipe {
 
-    private int ID;
-    private String name = " ";
-    private HashSet<String> recipeIngredientList = new HashSet();
+   private int ID;
+   private String name = " ";
+   private String description = " ";
+   private HashSet<String> recipeIngredientList = new HashSet();
 
-    public Recipe(int recipeID, String inName, String... ingredients) {
+   public Recipe(int recipeID, String inName, String inDescription, String... ingredients) {
 
-        this.ID = recipeID;
-        this.name = inName.toLowerCase();
+      this.ID = recipeID;
+      this.name = inName.toLowerCase();
+      this.description = inDescription;
 
-        for (String i : ingredients) {
-           
-                this.recipeIngredientList.add(i.toLowerCase());
+      for (String i : ingredients) {
 
-        }
+         this.recipeIngredientList.add(i.toLowerCase());
 
-    }
+      }
 
-    public Recipe(int inID, String inName, HashSet ingredients) {
-        this.ID = inID;
-        this.name = inName.toLowerCase();
-        this.recipeIngredientList = ingredients;
-    }
+   }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String inName){
-        
-        name = inName;
-        
-    }
+   public Recipe(int inID, String inName, String inDescription, HashSet<String> ingredients) {
+      this.ID = inID;
+      this.name = inName.toLowerCase();
+      this.description = inDescription;
+      this.recipeIngredientList = ingredients;
+   }
 
-    public int getRecipeID() {
-        return this.ID;
+   public String getDescription() {
+      return description;
+   }
 
-    }
+   public void setDescription(String description) {
+      this.description = description;
+   }
 
-    public void addRecipeIngredient(String inIngredient) {
+   public String getName() {
+      return name;
+   }
 
-        this.recipeIngredientList.add(inIngredient.toLowerCase());
-    }
+   public void setName(String inName) {
 
-    public void deleteRecipeIngredient(String inIngredient) {
+      name = inName;
 
-        recipeIngredientList.remove(inIngredient.toLowerCase());
-    }
+   }
 
-    public String getRecipeIngredient(String inIngredient) {
+   public int getRecipeID() {
+      return this.ID;
 
-        String result = null;
+   }
 
-        for (String i : this.recipeIngredientList) {
+   public void addRecipeIngredient(String inIngredient) {
 
-            if(this.recipeIngredientList.contains(inIngredient)){
-                
-                result = i;
-                System.out.println("*****"+i);
-            }
-   
-        }
-        return result;
-    }
-    
-    public HashSet<String> getRecipeIngredients() {
-       return recipeIngredientList;
-    }
+      this.recipeIngredientList.add(inIngredient.toLowerCase());
+   }
+
+   public void deleteRecipeIngredient(String inIngredient) {
+
+      recipeIngredientList.remove(inIngredient.toLowerCase());
+   }
+
+   public String getRecipeIngredient(String inIngredient) {
+
+      String result = null;
+
+      for (String i : this.recipeIngredientList) {
+
+         if (this.recipeIngredientList.contains(inIngredient)) {
+
+            result = i;
+            System.out.println("*****" + i);
+         }
+
+      }
+      return result;
+   }
+
+   public HashSet<String> getRecipeIngredients() {
+      return recipeIngredientList;
+   }
 
    @Override
    public boolean equals(Object obj) {
@@ -89,7 +101,5 @@ public class Recipe {
          return false;
       }
    }
-    
-    
 
 }

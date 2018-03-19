@@ -3,6 +3,7 @@ package edu.psu.ist411.service;
 import edu.psu.ist411.recipe.Recipe;
 import edu.psu.ist411.recipe.RecipeDAO;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -55,11 +56,26 @@ public class RecipeResource {
                         recipe.getRecipeID(), recipe.getName());
             }
 
-        } catch (IOException ex) {
-            Logger.getLogger(RecipeResource.class.getName()).log(Level.SEVERE, null, ex);
-            response = "An exception occurred :(";
-        }
-
+         Recipe recipe = dao.getRecipeById(id);
+         if (recipe == null) {
+            response = "Could not find a recipe with that ID";
+         } else {
+            
+            StringBuilder ingredients = new StringBuilder();
+            
+            for (Iterator<String> iterator = recipe.getRecipeIngredients().iterator(); iterator.hasNext();) {
+               String next = iterator.next();
+               ingredients.append(next);
+               if (iterator.hasNext()) {
+                  ingredients.append(",");
+               }
+            }
+            
+            response = String.format("Recipe ID: %d%nRecipe name: %s%nRecipe Ingredients: %s%n"
+                    + "Recipe description: %s", 
+                    recipe.getRecipeID(), recipe.getName(), ingredients.toString(), recipe.getDescription());
+         }
+          
         return response;
 
 //      return "<html>\n"
